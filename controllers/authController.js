@@ -28,10 +28,13 @@ async function registration(userData) {
 
     const {password: pass, ...payload} = userData
 
-    await registerUser(userData)
+    try {
+        await registerUser(userData)
+    } catch (e) {
+        return e
+    }
 
     const accessToken = tokenGenerator(payload, '1h')
-
 
     return { accessToken }
 

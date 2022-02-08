@@ -6,6 +6,7 @@ const {tokenGenerator} = require("./helper/tokenGenerator");
 
 const router = new Router()
 
+
 router.post('/login', async (ctx) => {
     const { username, password} = ctx.request.body
 
@@ -29,5 +30,6 @@ router.get('/user/:username', async (ctx) => {
 
     ctx.body = await getUser(username)
 })
+
 
 module.exports = router

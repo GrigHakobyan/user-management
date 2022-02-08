@@ -8,12 +8,14 @@ async function setUser(ctx, next) {
             const user = jwt.verify(ctx.state.token, process.env.SECRET_KEY)
             ctx.state.user = user
 
-            return next()
+            await next()
         } catch (e){
             ctx.body = HttpError("Unauthorized", 401)
         }
 
     }
+
+    await next()
 }
 
 module.exports = { setUser }

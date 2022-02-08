@@ -11,6 +11,8 @@ async function getAuthToken (ctx, next) {
         ctx.state.token = token
         await next()
     }
+
+    await next()
 }
 
 module.exports = { getAuthToken }

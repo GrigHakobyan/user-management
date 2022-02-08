@@ -35,7 +35,7 @@ async function registerUser({username, password, email}) {
     })
 
     if(user) {
-        return HttpError("User Already Exist")
+        throw HttpError("User Already Exist")
     }
 
     const newUser = await User.create({username,email,password})

@@ -1,6 +1,6 @@
-module.exports.HttpError = (message= "") => {
+module.exports.HttpError = (message= "", statusCode= 400) => {
     return {
-        statusCode: 400,
+        statusCode,
         message
     }
 }

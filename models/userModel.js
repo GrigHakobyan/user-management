@@ -1,6 +1,7 @@
-const { Sequelize,Model , DataTypes } = require('sequelize')
-const sequelize = new Sequelize()
+const { DataTypes } = require('sequelize')
+const bcrypt = require('bcrypt')
 
+const sequelize = require('../db')
 
 
 const User = sequelize.define("user",{
@@ -14,12 +15,20 @@ const User = sequelize.define("user",{
         type: DataTypes.STRING,
         unique: true
     },
+
     password: DataTypes.STRING,
+
     email: {
         type: DataTypes.STRING,
         unique: true
-    }
+    },
+
 })
 
 
+User.addHook('beforeCreate', async (user) => {
+    user.password = await bcrypt.hash(user.password, 5)
+})
+
 module.exports = User
+

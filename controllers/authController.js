@@ -1,23 +1,39 @@
-const {loginByUsername, registerUser} = require("../services/authService");
+const { loginByUsername, registerUser } = require("../services/authService");
+const { HttpError } = require("../helper/httpErrors");
+const {tokenGenerator} = require("../helper/tokenGenerator");
 
 
-async function login(ctx) {
-    const { username, password } = ctx.request.body
 
-    const user = await loginByUsername(username, password)
-    console.log(user)
+async function login(username, password) {
+    try {
+        const user = await loginByUsername(username, password)
 
-    ctx.body = user
+        const { password: pass,refreshToken: token, ...data } = user
+
+        const accessToken = tokenGenerator(data, '30s')
+
+        return { accessToken }
+
+    } catch (e) {
+        console.log(e)
+        return e
+    }
 }
 
-async function registration(ctx) {
-    const userData = ctx.request.body
+async function registration(userData) {
 
-    const user = await registerUser(userData)
+    if (!userData.username.trim() || !userData.password.trim() || !userData.email.trim()){
+        return HttpError("User data not valid")
+    }
 
-    console.log(user)
+    const {password: pass, ...payload} = userData
 
-    ctx.body = user
+    await registerUser(userData)
+
+    const accessToken = tokenGenerator(payload, '1h')
+
+
+    return { accessToken }
 
 }
 

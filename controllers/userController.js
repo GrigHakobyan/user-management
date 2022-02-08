@@ -1,13 +1,18 @@
 const { getUserById } = require('../services/userService')
 
-async function getUser(ctx){
-    const username = ctx.params.username
-    const user = await getUserById(username)
+async function getUser(username){
 
+    try {
+        const user = await getUserById(username)
 
-    const {password, ...data} = user
+        const {password, ...data} = user
 
-    ctx.body = data
+        return { data }
+
+    }catch (e) {
+        console.log(e)
+        return e
+    }
 }
 
 module.exports = { getUser }

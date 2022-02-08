@@ -1,28 +1,47 @@
-const fakeDB = require('../helper/fakeDB')
 const {HttpError} = require("../helper/httpErrors");
+const bcrypt = require('bcrypt')
+
+const User = require('../models/userModel')
 
 async function loginByUsername(username, password){
-    const user = fakeDB.users.find(user => user.username === username && user.password === password)
+
+    const user = await User.findOne({
+        attributes: ['username', 'email', 'password'],
+        where: {
+            username: username
+        }
+    })
 
     if(!user) {
-        return HttpError(`User by username ${username} not found`)
+        throw HttpError(`User by username ${username} not found`)
     }
 
-    return user
+    const isVerified = await bcrypt.compare(password, user.dataValues.password)
+
+    if(isVerified) {
+        return user.dataValues
+    }
+
+    throw HttpError(`Invalid Request`)
 }
 
 async function registerUser({username, password, email}) {
-    if (!username.trim() || !password.trim() || !email.trim()){
-        return HttpError("User data not valid")
-    }
 
-    const user = fakeDB.users.find(user => user.username === username || user.email === email)
+    const user = await User.findOne({
+        where: {
+            username: username,
+            email: email
+        }
+    })
 
     if(user) {
         return HttpError("User Already Exist")
     }
 
-    return {username, password, email}
+    const newUser = await User.create({username,email,password})
+
+
+    return newUser.dataValues
 }
 
 

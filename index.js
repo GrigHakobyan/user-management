@@ -6,23 +6,33 @@ require('dotenv').config()
 
 const sequelize = require('./db')
 
-const { getAuthToken } = require('./interceptors/authInterceptor')
-const { setUser } = require('./interceptors/userInterceptor')
+const { authMiddleware } = require('./middleware/authMiddleware')
+const { userMiddleware } = require('./middleware/userMiddleware')
 
 const PORT = process.env.PORT || 5000
 
 const app = new Koa()
 
-const router = require('./router')
+const userRouter = require('./routes/userRouter')
+const authRouter = require('./routes/authRouter')
+const carRouter = require('./routes/carRouter')
 
 app.use(cors())
 
 app.use(bodyParser())
 
-app.use(getAuthToken)
-app.use(setUser)
+app.use(authMiddleware)
+app.use(userMiddleware)
 
-app.use(router.routes())
+app.use(authRouter.routes())
+app.use(authRouter.allowedMethods())
+
+app.use(userRouter.routes())
+app.use(userRouter.allowedMethods())
+
+app.use(carRouter.routes())
+app.use(carRouter.allowedMethods())
+
 
 async function start() {
     try {

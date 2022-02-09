@@ -2,6 +2,7 @@ const { DataTypes } = require('sequelize')
 const bcrypt = require('bcrypt')
 
 const sequelize = require('../db')
+const Car = require('./carModel')
 
 
 const User = sequelize.define("user",{
@@ -24,6 +25,10 @@ const User = sequelize.define("user",{
     },
 
 })
+
+User.hasMany(Car)
+Car.belongsTo(User)
+
 
 
 User.addHook('beforeCreate', async (user) => {

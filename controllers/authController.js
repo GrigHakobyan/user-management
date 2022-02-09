@@ -1,35 +1,38 @@
 const { loginByUsername, registerUser } = require("../services/authService");
-const { HttpError } = require("../helper/httpErrors");
 const {tokenGenerator} = require("../helper/tokenGenerator");
+const {BadRequestError} = require("../helper/exceptions/badRequestError");
 
 
 
-async function login(username, password) {
+async function login({ username, password }) {
     try {
         const user = await loginByUsername(username, password)
 
-        const { password: pass,refreshToken: token, ...data } = user
+        const { password: pass, ...data } = user
 
-        const accessToken = tokenGenerator(data, '30s')
+        const accessToken = tokenGenerator(data, '1h')
 
         return { accessToken }
 
     } catch (e) {
-        console.log(e)
         return e
     }
 }
 
-async function registration(userData) {
+async function registration({ username, password, email }) {
 
-    if (!userData.username.trim() || !userData.password.trim() || !userData.email.trim()){
-        return HttpError("User data not valid")
+    if (!username.trim() || !password.trim() || !email.trim()){
+        return new BadRequestError("User data not valid")
     }
 
-    const {password: pass, ...payload} = userData
+
+    const payload = {
+        username,
+        password
+    }
 
     try {
-        await registerUser(userData)
+        await registerUser({username, password, email})
     } catch (e) {
         return e
     }

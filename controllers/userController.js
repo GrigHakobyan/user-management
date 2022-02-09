@@ -1,4 +1,5 @@
-const { getUserById } = require('../services/userService')
+const { getUserById, getAllUsers} = require('../services/userService')
+const {create} = require("./carController");
 
 async function getUser(username){
 
@@ -10,9 +11,12 @@ async function getUser(username){
         return { data }
 
     }catch (e) {
-        console.log(e)
         return e
     }
 }
 
-module.exports = { getUser }
+async function getUsers() {
+    return await getAllUsers()
+}
+
+module.exports = { getUser, getUsers }

@@ -1,7 +1,7 @@
-const {HttpError} = require("../helper/httpErrors");
 const bcrypt = require('bcrypt')
 
 const User = require('../models/userModel')
+const {BadRequestError} = require("../helper/exceptions/badRequestError");
 
 async function loginByUsername(username, password){
 
@@ -13,7 +13,7 @@ async function loginByUsername(username, password){
     })
 
     if(!user) {
-        throw HttpError(`User by username ${username} not found`)
+        throw new BadRequestError(`Invalid username or password`)
     }
 
     const isVerified = await bcrypt.compare(password, user.dataValues.password)
@@ -22,7 +22,7 @@ async function loginByUsername(username, password){
         return user.dataValues
     }
 
-    throw HttpError(`Invalid Request`)
+    throw new BadRequestError()
 }
 
 async function registerUser({username, password, email}) {
@@ -35,7 +35,7 @@ async function registerUser({username, password, email}) {
     })
 
     if(user) {
-        throw HttpError("User Already Exist")
+        throw new BadRequestError("User Already Exist")
     }
 
     const newUser = await User.create({username,email,password})

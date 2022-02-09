@@ -1,19 +1,18 @@
-const {HttpError} = require("../helper/httpErrors")
-
 const User = require('../models/userModel')
+const {NotFoundError} = require("../helper/exceptions/notFoundError");
 
 
-async function getUserById(username){
+async function getUserById(id){
 
     const user = await User.findOne({
-        attributes: ['username', 'email'],
+        attributes: ['id', 'username', 'email'],
         where: {
-            username: username
+            id: id
         }
     })
 
     if(!user) {
-        throw HttpError(`User by id ${username} not found`)
+        throw new NotFoundError(`User by id ${id} not found`)
     }
 
     return user.dataValues
@@ -23,7 +22,7 @@ async function getUserById(username){
 
 async function getUserByUsername(username) {
     const user = await User.findOne({
-        attributes: ['username', 'email', 'refreshToken'],
+        attributes: ['id','username', 'email'],
         where: {
             username:username
         }
@@ -32,4 +31,13 @@ async function getUserByUsername(username) {
     return user.dataValues
 }
 
-module.exports = { getUserById, getUserByUsername }
+async function getAllUsers() {
+    const users = await User.findAll({
+        attributes: ['id', 'username', 'email']
+    })
+
+    return users
+}
+
+
+module.exports = { getUserById, getUserByUsername, getAllUsers }

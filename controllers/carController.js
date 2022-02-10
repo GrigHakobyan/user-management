@@ -4,6 +4,7 @@ const {
 
 
 async function create(username, newCar) {
+
     try {
         return  await createCar(username, newCar)
 
@@ -14,6 +15,7 @@ async function create(username, newCar) {
 
 
 async function remove(username, carId) {
+
     try {
         await deleteCar(username, carId)
 
@@ -22,6 +24,7 @@ async function remove(username, carId) {
     }
 }
 async function update(username, carId, car) {
+
     try {
         await updateCar(username, carId, car)
 
@@ -30,6 +33,7 @@ async function update(username, carId, car) {
     }
 }
 async function getAll() {
+
     try {
         return await getAllCars()
 
@@ -38,6 +42,7 @@ async function getAll() {
     }
 }
 async function getOneById(carId) {
+
     try {
         return  await getCarById(carId)
 
@@ -46,6 +51,7 @@ async function getOneById(carId) {
     }
 }
 async function getOneByName(carName) {
+
     try {
         return  await getCarByName(carName)
 
@@ -54,6 +60,7 @@ async function getOneByName(carName) {
     }
 }
 async function getAllByName(username) {
+
     try {
         return await getAllCarsByUsername(username)
 

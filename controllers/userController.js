@@ -1,10 +1,25 @@
-const { getUserById, getAllUsers} = require('../services/userService')
-const {create} = require("./carController");
+const { getUserById, getAllUsers, getUserByUsername} = require('../services/userService')
 
-async function getUser(username){
+
+async function searchUser(username) {
 
     try {
-        const user = await getUserById(username)
+        const user = await getUserByUsername(username)
+
+        const {password, ...data} = user
+
+        return { data }
+
+    }catch (e) {
+        return e
+    }
+}
+
+
+async function getUser(id){
+
+    try {
+        const user = await getUserById(id)
 
         const {password, ...data} = user
 
@@ -19,4 +34,4 @@ async function getUsers() {
     return await getAllUsers()
 }
 
-module.exports = { getUser, getUsers }
+module.exports = { getUser, getUsers, searchUser }

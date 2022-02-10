@@ -1,15 +1,13 @@
 const Router = require('koa-router')
-const { getUser, getUsers} = require("../controllers/userController");
-const {getUserById} = require("../services/userService");
+const { getUser, getUsers, searchUser} = require("../controllers/userController");
 
 
 const router = new Router()
 
-router.get('/user/:username', async (ctx) => {
-
+router.get('/search/:username', async (ctx) => {
     const username = ctx.params.username
 
-    ctx.body = await getUser(username)
+    ctx.body = await searchUser(username)
 })
 
 router.get('/users', async (ctx) => {
@@ -19,7 +17,7 @@ router.get('/users', async (ctx) => {
 router.get('/user/:id', async (ctx) => {
     const id = ctx.params.id
 
-    ctx.body = await getUserById(id)
+    ctx.body = await getUser(id)
 })
 
 

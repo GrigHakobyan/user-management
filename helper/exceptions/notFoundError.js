@@ -20,8 +20,6 @@ class NotFoundError extends Error {
     setMessage(message) {
         this.message = message
     }
-
-
 }
 
 module.exports = { NotFoundError }

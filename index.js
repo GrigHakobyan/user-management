@@ -6,8 +6,7 @@ require('dotenv').config()
 
 const sequelize = require('./db')
 
-const { authMiddleware } = require('./middleware/authMiddleware')
-const { userMiddleware } = require('./middleware/userMiddleware')
+const { authMiddleware } = require('./middlewares/authMiddleware')
 
 const PORT = process.env.PORT || 5000
 
@@ -21,11 +20,10 @@ app.use(cors())
 
 app.use(bodyParser())
 
-app.use(authMiddleware)
-app.use(userMiddleware)
-
 app.use(authRouter.routes())
 app.use(authRouter.allowedMethods())
+
+app.use(authMiddleware)
 
 app.use(userRouter.routes())
 app.use(userRouter.allowedMethods())

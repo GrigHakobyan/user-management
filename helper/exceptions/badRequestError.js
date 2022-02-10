@@ -20,8 +20,6 @@ class BadRequestError extends Error {
     setMessage(message) {
         this.message = message
     }
-
-
 }
 
 module.exports = { BadRequestError }

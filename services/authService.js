@@ -40,7 +40,6 @@ async function registerUser({username, password, email}) {
 
     const newUser = await User.create({username,email,password})
 
-
     return newUser.dataValues
 }
 

@@ -20,8 +20,6 @@ class UnauthorizedError extends Error {
     setMessage(message) {
         this.message = message
     }
-
-
 }
 
 module.exports = { UnauthorizedError }

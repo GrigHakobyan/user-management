@@ -5,6 +5,11 @@ const {BadRequestError} = require("../helper/exceptions/badRequestError");
 
 
 async function login({ username, password }) {
+
+    if (!username.trim() || !password.trim()){
+        return new BadRequestError("User data not valid")
+    }
+
     try {
         const user = await loginByUsername(username, password)
 
@@ -20,11 +25,9 @@ async function login({ username, password }) {
 }
 
 async function registration({ username, password, email }) {
-
     if (!username.trim() || !password.trim() || !email.trim()){
         return new BadRequestError("User data not valid")
     }
-
 
     const payload = {
         username,

@@ -39,7 +39,6 @@ router.delete('/car', async (ctx) => {
 })
 
 router.get('/cars', async (ctx) => {
-
     ctx.body = await getAll()
 })
 

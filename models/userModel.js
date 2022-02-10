@@ -30,7 +30,6 @@ User.hasMany(Car)
 Car.belongsTo(User)
 
 
-
 User.addHook('beforeCreate', async (user) => {
     user.password = await bcrypt.hash(user.password, 5)
 })

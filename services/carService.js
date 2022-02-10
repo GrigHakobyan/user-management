@@ -4,6 +4,7 @@ const User = require('../models/userModel')
 const { getUserByUsername } = require('./userService')
 const {NotFoundError} = require("../helper/exceptions/notFoundError");
 const {BadRequestError} = require("../helper/exceptions/badRequestError");
+const {isString} = require("../helper/isString");
 
 async function createCar(username, { name, model }){
     const user = await getUserByUsername(username)
@@ -52,6 +53,10 @@ async function getAllCars(){
 }
 
 async function getCarById(carId){
+    if(isString(carId)){
+        throw new BadRequestError()
+    }
+
     const car = await Car.findOne({ where: { id: carId } })
 
     throwErrorIfDoesNotExist(car, 'Car does not exist')
@@ -70,6 +75,10 @@ async function getCarByName(carName){
 }
 
 async function getAllCarsByUsername(username){
+    if(!isString(username)) {
+        throw new BadRequestError()
+    }
+
     const user = await User.findOne({
         attributes: ['id'],
         where: { username: username }

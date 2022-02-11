@@ -7,26 +7,19 @@ const {BadRequestError} = require("../helper/exceptions/badRequestError");
 async function login({ username, password }) {
 
     if (!username.trim() || !password.trim()){
-        return new BadRequestError("User data not valid")
+        throw new BadRequestError("User data not valid")
     }
 
-    try {
-        const user = await loginByUsername(username, password)
+    const user = await loginByUsername(username, password)
 
-        const { password: pass, ...data } = user
+    const { password: pass, ...data } = user
 
-        const accessToken = tokenGenerator(data, '1h')
-
-        return { accessToken }
-
-    } catch (e) {
-        return e
-    }
+    return tokenGenerator(data, '1h')
 }
 
 async function registration({ username, password, email }) {
     if (!username.trim() || !password.trim() || !email.trim()){
-        return new BadRequestError("User data not valid")
+        throw new BadRequestError("User data not valid")
     }
 
     const payload = {
@@ -34,16 +27,9 @@ async function registration({ username, password, email }) {
         password
     }
 
-    try {
-        await registerUser({username, password, email})
-    } catch (e) {
-        return e
-    }
+    await registerUser({username, password, email})
 
-    const accessToken = tokenGenerator(payload, '1h')
-
-    return { accessToken }
-
+    return tokenGenerator(payload, '1h')
 }
 
 module.exports = { login, registration }

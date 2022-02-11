@@ -27,9 +27,13 @@ async function deleteCar(username, carId){
 
     const car = await Car.findOne({where: { id: carId }})
 
-    throwErrorIfDoesNotExist(car.dataValues, 'Car does not exist')
+    console.log(car)
+
+    throwErrorIfDoesNotExist(car, 'Car does not exist')
 
     await car.destroy()
+
+    return car
 }
 
 async function updateCar(username, carId, { name, model }){
@@ -39,17 +43,19 @@ async function updateCar(username, carId, { name, model }){
 
     const car = await Car.findOne({ where: { id: carId } })
 
-    throwErrorIfDoesNotExist(car.dataVlues, 'Car does not exist')
+    throwErrorIfDoesNotExist(car, 'Car does not exist')
 
     car.name = name || car.name
     car.model = model || car.model
 
-    await car.save()
-
+    return await car.save()
 }
 
 async function getAllCars(){
-    return await Car.findAll()
+    return await Car.findAll({
+        attributes: ['id', 'name', 'model']
+    })
+
 }
 
 async function getCarById(carId){

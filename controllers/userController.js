@@ -2,36 +2,16 @@ const { getUserById, getAllUsers, getUserByUsername} = require('../services/user
 
 
 async function searchUser(username) {
-
-    try {
-        const user = await getUserByUsername(username)
-
-        const {password, ...data} = user
-
-        return { data }
-
-    }catch (e) {
-        return e
-    }
+    return getUserByUsername(username)
 }
 
 
 async function getUser(id){
-
-    try {
-        const user = await getUserById(id)
-
-        const {password, ...data} = user
-
-        return { data }
-
-    }catch (e) {
-        return e
-    }
+    return getUserById(id)
 }
 
 async function getUsers() {
-    return await getAllUsers()
+    return getAllUsers()
 }
 
 module.exports = { getUser, getUsers, searchUser }

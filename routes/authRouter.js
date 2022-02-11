@@ -9,21 +9,19 @@ const router = new Router()
 router.post('/login', async (ctx) => {
     const userData = ctx.request.body
 
-    ctx.body = await login(userData)
+    return login(userData)
 })
 
 
 router.post('/registration', async (ctx) => {
     const userData = ctx.request.body
 
-    ctx.body = await registration(userData)
+    return registration(userData)
 })
 
 
-router.get('/auth', authMiddleware,(ctx) => {
-    const token = tokenGenerator(ctx.state.user, '1h')
-
-    ctx.body = {token}
+router.get('/auth', authMiddleware,async (ctx) => {
+    return tokenGenerator(ctx.state.user, '1h')
 })
 
 module.exports = router

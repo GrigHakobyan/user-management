@@ -23,7 +23,9 @@ async function getUserById(id){
         throw new NotFoundError(`User by id ${id} not found`)
     }
 
-    return user.toJSON()
+    const {password, ...data} = user.toJSON()
+
+    return data
 }
 
 
@@ -41,15 +43,17 @@ async function getUserByUsername(username) {
         include: Car
     })
 
-    return user.toJSON()
+    if(!user) {
+        throw new NotFoundError(`User by username ${username} not found`)
+    }
+
+    return user
 }
 
 async function getAllUsers() {
-    const users = await User.findAll({
+    return await User.findAll({
         attributes: ['id', 'username', 'email']
     })
-
-    return users
 }
 
 

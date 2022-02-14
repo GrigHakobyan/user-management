@@ -1,13 +1,17 @@
-const { getUserById } = require('../services/userService')
-
-async function getUser(ctx){
-    const username = ctx.params.username
-    const user = await getUserById(username)
+const { getUserById, getAllUsers, getUserByUsername} = require('../services/userService')
 
 
-    const {password, ...data} = user
-
-    ctx.body = data
+async function searchUser(username) {
+    return getUserByUsername(username)
 }
 
-module.exports = { getUser }
+
+async function getUser(id){
+    return getUserById(id)
+}
+
+async function getUsers() {
+    return getAllUsers()
+}
+
+module.exports = { getUser, getUsers, searchUser }

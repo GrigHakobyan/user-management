@@ -1,20 +1,43 @@
 const Koa = require('koa')
-const { Sequelize } = require('sequelize')
 const bodyParser = require('koa-body')
+const cors = require('@koa/cors')
 
-const sequelize = new Sequelize('postgres://root:root@example.com:5432/dbname')
+require('dotenv').config()
+
+const { sequelize } = require('./models')
+
+const {responseMiddleware} = require("./middlewares/responseMiddleware");
+
+const PORT = process.env.PORT || 5000
+
 const app = new Koa()
-const router = require('./router')
+
+const userRouter = require('./routes/userRouter')
+const authRouter = require('./routes/authRouter')
+const carRouter = require('./routes/carRouter')
+
+app.use(cors())
 
 app.use(bodyParser())
 
-app.use(router.routes())
+app.use(responseMiddleware)
+
+app.use(authRouter.routes())
+app.use(authRouter.allowedMethods())
+
+app.use(userRouter.routes())
+app.use(carRouter.routes())
+
+app.use(userRouter.allowedMethods())
+app.use(carRouter.allowedMethods())
+
 
 async function start() {
     try {
         await sequelize.authenticate()
+        await sequelize.sync()
 
-        app.listen(5000, () => {
+        app.listen(PORT, () => {
             console.log('Server start on port 5000')
         })
     } catch (e) {
@@ -23,3 +46,6 @@ async function start() {
 }
 
 start()
+
+
+module.exports = app

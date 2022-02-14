@@ -1,24 +1,38 @@
-const {loginByUsername, registerUser} = require("../services/authService");
+const { loginByUsername, registerUser } = require("../services/authService");
+const {tokenGenerator} = require("../helper/tokenGenerator");
+const {BadRequestError} = require("../helper/exceptions/badRequestError");
 
 
-async function login(ctx) {
-    const { username, password } = ctx.request.body
+async function login({ username, password }) {
+
+    if (!username.trim() || !password.trim()){
+        throw new BadRequestError("User data not valid")
+    }
 
     const user = await loginByUsername(username, password)
-    console.log(user)
 
-    ctx.body = user
+    const { password: pass, ...data } = user
+
+    const token = await tokenGenerator(data, '1h')
+
+    return { ...token, ...data }
 }
 
-async function registration(ctx) {
-    const userData = ctx.request.body
+async function registration({ username, password, email }) {
+    if (!username.trim() || !password.trim() || !email.trim()){
+        throw new BadRequestError("User data not valid")
+    }
 
-    const user = await registerUser(userData)
+    const payload = {
+        username,
+        email
+    }
 
-    console.log(user)
+    await registerUser({username, password, email})
 
-    ctx.body = user
+    const token = await tokenGenerator(payload, '1h')
 
+    return { ...token, username, email }
 }
 
 module.exports = { login, registration }

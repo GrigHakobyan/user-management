@@ -1,6 +1,5 @@
-const User = require('../models/userModel')
+const {User, Car} = require('../models')
 const {NotFoundError} = require("../helper/exceptions/notFoundError")
-const Car = require('../models/carModel')
 const {isString} = require("../helper/isString");
 const {BadRequestError} = require("../helper/exceptions/badRequestError");
 
@@ -17,7 +16,6 @@ async function getUserById(id){
         },
         include: Car
     })
-
 
     if(!user) {
         throw new NotFoundError(`User by id ${id} not found`)

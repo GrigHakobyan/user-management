@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 
-const User = require('../models/userModel')
-const {BadRequestError} = require("../helper/exceptions/badRequestError");
+const {User} = require('../models')
+const {BadRequestError} = require("../helper/exceptions/badRequestError")
 
 async function loginByUsername(username, password){
 

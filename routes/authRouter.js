@@ -21,7 +21,9 @@ router.post('/registration', async (ctx) => {
 
 
 router.get('/auth', authMiddleware,async (ctx) => {
-    return tokenGenerator(ctx.state.user, '1h')
+    const token = await tokenGenerator(ctx.state.user, '1h')
+
+    return { ...token, ...ctx.state.user}
 })
 
 module.exports = router

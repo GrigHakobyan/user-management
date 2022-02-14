@@ -3,7 +3,6 @@ const {tokenGenerator} = require("../helper/tokenGenerator");
 const {BadRequestError} = require("../helper/exceptions/badRequestError");
 
 
-
 async function login({ username, password }) {
 
     if (!username.trim() || !password.trim()){
@@ -14,7 +13,9 @@ async function login({ username, password }) {
 
     const { password: pass, ...data } = user
 
-    return tokenGenerator(data, '1h')
+    const token = await tokenGenerator(data, '1h')
+
+    return { ...token, ...data }
 }
 
 async function registration({ username, password, email }) {
@@ -24,12 +25,14 @@ async function registration({ username, password, email }) {
 
     const payload = {
         username,
-        password
+        email
     }
 
     await registerUser({username, password, email})
 
-    return tokenGenerator(payload, '1h')
+    const token = await tokenGenerator(payload, '1h')
+
+    return { ...token, username, email }
 }
 
 module.exports = { login, registration }

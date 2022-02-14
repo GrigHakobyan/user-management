@@ -4,9 +4,8 @@ const cors = require('@koa/cors')
 
 require('dotenv').config()
 
-const sequelize = require('./db')
+const { sequelize } = require('./models')
 
-const { authMiddleware } = require('./middlewares/authMiddleware')
 const {responseMiddleware} = require("./middlewares/responseMiddleware");
 
 const PORT = process.env.PORT || 5000
@@ -26,8 +25,6 @@ app.use(responseMiddleware)
 app.use(authRouter.routes())
 app.use(authRouter.allowedMethods())
 
-app.use(authMiddleware)
-
 app.use(userRouter.routes())
 app.use(carRouter.routes())
 
@@ -39,7 +36,6 @@ async function start() {
     try {
         await sequelize.authenticate()
         await sequelize.sync()
-
 
         app.listen(PORT, () => {
             console.log('Server start on port 5000')

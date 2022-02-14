@@ -11,7 +11,8 @@ async function responseMiddleware(ctx, next) {
         ctx.body = response
 
     } catch (e) {
-        ctx. body = {
+        console.log(e)
+        ctx.body = {
             error: {
                 statusCode: e.getStatusCode(),
                 message: e.getMessage()

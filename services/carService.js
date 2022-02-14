@@ -1,5 +1,4 @@
-const Car = require('../models/carModel')
-const User = require('../models/userModel')
+const {User, Car} = require('../models')
 
 const { getUserByUsername } = require('./userService')
 const {NotFoundError} = require("../helper/exceptions/notFoundError");
@@ -26,8 +25,6 @@ async function deleteCar(username, carId){
     throwErrorIfDoesNotExist(user, 'Invalid request')
 
     const car = await Car.findOne({where: { id: carId }})
-
-    console.log(car)
 
     throwErrorIfDoesNotExist(car, 'Car does not exist')
 
